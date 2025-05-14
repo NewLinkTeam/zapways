@@ -10,8 +10,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async": "^3.2.5",
+    "axios": "^1.9.0",
     "express": "^5.1.0",
-    "soap": "^1.1.11"
+    "lodash": "^4.17.21",
+    "moment": "^2.30.1",
+    "moment-jalaali": "^0.10.0",
+    "request": "^2.88.2",
+    "soap": "^1.1.11",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
