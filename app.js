@@ -1,23 +1,43 @@
-const express =require('express')
-
-
+const express = require('express')
+const bodyParserErrorHandler = require('./utility/bodyParserErrorHandler')
 const routes = require('./routes/routes')
-const app=express()
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true })); 
+const app = express()
 
-const port =3001
+// Middleware for parsing request bodies
+app.use(express.json({ limit: '10mb' }))
+app.use(express.urlencoded({ extended: true, limit: '10mb' }))
 
-app.get('/',(req,res)=>{
-    res.send('hello app.js')
+// Error handler for JSON parsing
+app.use(bodyParserErrorHandler)
+
+const port = 3001
+
+// Middleware for logging requests
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.originalUrl}`)
+  next()
 })
 
-app.use('/api',routes)
+app.get('/', (req, res) => {
+  res.send('hello app.js')
+})
 
+// API routes
+app.use('/api', routes)
 
-app.listen(port,()=>{
-    console.log(`port is running on ${port}`)
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Server error:', err)
+  res.status(500).json({
+    success: false,
+    error: 'Server error',
+    details: err.message || 'Unknown error'
+  })
+})
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`)
 })
 
 
